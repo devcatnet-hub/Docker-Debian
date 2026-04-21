@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  debian:
+    image: deathwalker66/debian
+    container_name: DEV.Debian
+    hostname: dev-debian  # Buena práctica añadir hostname
+    volumes:
+      - type: bind
+        source: /mnt/Dock/Com
+        target: /COM
+      - type: bind
+        source: ./SCP
+        target: /SCP
+      - type: bind
+        source: ./LOG
+        target: /var/log
+      - type: bind
+        source: ./INI/supervisor.conf
+        target: /etc/supervisor/supervisord.conf
+      - type: bind
+        source: ./INI/startup.conf
+        target: /etc/supervisor/conf.d/startup.conf
+    ports:
+      - target: 22
+        published: 30322
+        protocol: tcp
+        mode: host  # Mejor rendimiento para SSH
+    networks:
+      - catnet
+    env_file: 
+      - .env
+    restart: unless-stopped  # Buena práctica para servicios
+    security_opt:
+      - no-new-privileges:true  # Mejor seguridad
+
+networks:
+  catnet:
+    name: catnet  # Definición explícita
+    external: true  # Ya que usas network_mode en v2.4
+
+# Ya no necesitas la sección volumes: pues convertimos COM a bind mount explícito
