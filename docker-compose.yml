@@ -12,9 +12,6 @@ services:
         source: ./SCP
         target: /SCP
       - type: bind
-        source: ./LOG
-        target: /var/log
-      - type: bind
         source: ./INI/supervisor.conf
         target: /etc/supervisor/supervisord.conf
       - type: bind
